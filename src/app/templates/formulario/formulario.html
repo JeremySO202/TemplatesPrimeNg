@@ -1,0 +1,139 @@
+<div
+  class="p-4"
+  [class]="{
+    'blur-sm': displayDialog,
+  }"
+>
+  <p-button label="Abrir Formulario" (click)="toggleDialog()"></p-button>
+
+  <p-button label="Mostrar Datos" severity="secondary" class="ml-2" (click)="showCurrentData()">
+  </p-button>
+</div>
+
+<p-dialog
+  [style]="{ width: '480px' }"
+  [(visible)]="displayDialog"
+  [modal]="true"
+  [resizable]="false"
+>
+  <ng-template #header>
+    <div class="">
+      <span class="font-bold whitespace-nowrap">Formulario Dinámico</span>
+    </div>
+  </ng-template>
+
+  <ng-template #content>
+    <form [formGroup]="dynamicForm" (ngSubmit)="onSubmit()" class="p-4">
+      <!-- Generar campos dinámicamente -->
+
+      @for (input of formInputs; track input.id) {
+        <div class="flex flex-col gap-6">
+          <!-- Campo de texto -->
+          @if (input.type === 'text' || input.type === 'email') {
+            <div>
+              <label for="input.id" class="block my-2 font-bold">
+                {{ input.label }}
+                @if (input.required) {
+                  <span class="text-red-500">*</span>
+                }
+              </label>
+              <input
+                pInputText
+                [id]="input.id"
+                [formControlName]="input.id"
+                [type]="input.type"
+                [placeholder]="input.placeholder || 'Ingrese ' + input.label.toLowerCase()"
+                class="w-full"
+                [class.border-red-500]="isFieldInvalid(input.id)"
+                [class.border-green-500]="isFieldValid(input.id)"
+              />
+              @if (isFieldInvalid(input.id)) {
+                <small class="text-red-500 block mt-1">{{ getFieldError(input.id) }}</small>
+              }
+            </div>
+          }
+
+          <!-- Campo numerico -->
+          @if (input.type === 'number') {
+            <div>
+              <label [for]="input.id" class="block my-2 font-medium">
+                {{ input.label }}
+                @if (input.required) {
+                  <span class="text-red-500">*</span>
+                }
+              </label>
+              <input
+                pInputText
+                [id]="input.id"
+                [formControlName]="input.id"
+                type="number"
+                [placeholder]="input.placeholder || 'Ingrese ' + input.label.toLowerCase()"
+                class="w-full"
+                [class.border-red-500]="isFieldInvalid(input.id)"
+                [class.border-green-500]="isFieldValid(input.id)"
+              />
+              @if (isFieldInvalid(input.id)) {
+                <small class="text-red-500 block mt-1">{{ getFieldError(input.id) }}</small>
+              }
+            </div>
+          }
+
+          <!-- Campo fecha -->
+          @if (input.type === 'date') {
+            <div>
+              <label [for]="input.id" class="block my-2 font-medium ">
+                {{ input.label }}
+                @if (input.required) {
+                  <span class="text-red-500">*</span>
+                }
+              </label>
+              <p-date-picker
+                [formControlName]="input.id"
+                [placeholder]="input.placeholder || 'Ingrese ' + input.label.toLowerCase()"
+                class="w-full relative z-50"
+                [iconDisplay]="'input'"
+                [showIcon]="true"
+                inputId="icondisplay"
+              />
+              @if (isFieldInvalid(input.id)) {
+                <small class="text-red-500 block mt-1">{{ getFieldError(input.id) }}</small>
+              }
+            </div>
+          }
+
+          <!-- Campo checkbox -->
+          @if (input.type === 'checkbox') {
+            <div class="flex items-center gap-2 my-2">
+              <p-checkbox [formControlName]="input.id" [inputId]="input.id" [binary]="true">
+              </p-checkbox>
+              <label [for]="input.id" class="font-medium">
+                {{ input.label }}
+                @if (input.required) {
+                  <span class="text-red-500">*</span>
+                }
+              </label>
+            </div>
+            @if (isFieldInvalid(input.id)) {
+              <small class="text-red-500 block mt-1">{{ getFieldError(input.id) }}</small>
+            }
+          }
+        </div>
+      }
+    </form>
+    <span class="text-gray-500 text-sm block mt-4">
+      <span class="text-red-500">*</span> Campos requeridos
+    </span>
+  </ng-template>
+
+  <ng-template #footer>
+    <div class="mt-2">
+
+
+      <p-button label="Cancelar" severity="secondary" (click)="toggleDialog()"> </p-button>
+
+      <p-button label="Limpiar" severity="secondary" class="ml-2" (click)="resetForm()"> </p-button>
+
+      <p-button label="Guardar" class="ml-2" (click)="onSubmit()"> </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
