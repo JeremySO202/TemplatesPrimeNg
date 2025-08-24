@@ -1,0 +1,24 @@
+<div
+  class="p-4"
+  [class]="{
+    'blur-sm': displayDialog,
+  }"
+>
+  <p-button label="Abrir Formulario" (click)="toggleDialog()"></p-button>
+
+  <p-button label="Mostrar Datos" severity="secondary" class="ml-2" (click)="showCurrentData()">
+  </p-button>
+</div>
+
+<formulario-dinamico
+  [formTitle]="'Formulario Dinámico'"
+  [onSubmitService]="onSubmit"
+  [submitButtonLabel]="'Ver datos en consola'"
+  [resetButtonLabel]="'Limpiar'"
+  [cancelButtonLabel]="'Cancelar'"
+  [dialogWidth]="'600px'"
+  [dialogHeight]="'auto'"
+  [(displayDialog)]="displayDialog"
+  [formInputs]="formInputs"
+  [(formData)]="formData"
+></formulario-dinamico>

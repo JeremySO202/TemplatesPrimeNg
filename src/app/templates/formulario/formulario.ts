@@ -1,12 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-  ValidatorFn,
-  AbstractControl,
-} from '@angular/forms';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -28,7 +21,7 @@ export interface FormularioData {
 }
 
 @Component({
-  selector: 'app-formulario',
+  selector: 'formulario-dinamico',
   standalone: true,
   imports: [
     CommonModule,
@@ -44,141 +37,76 @@ export interface FormularioData {
   templateUrl: './formulario.html',
 })
 export class Formulario implements OnInit {
-  // Validadores personalizados
-  private static phoneValidator(control: AbstractControl): { [key: string]: any } | null {
-    const value = control.value;
-    if (!value) return null;
+  // Configuraciones del formulario
+  /**
+   * Título del formulario.
+   * Se muestra en la parte superior del formulario.
+   */
+  @Input() public formTitle?: string = '';
 
-    const phoneRegex = /^(\+?[0-9]{1,4}\-)?[0-9]{8}$/;
-    return phoneRegex.test(value) ? null : { invalidPhone: true };
-  }
+  /**
+   * Función que se llama al enviar el formulario.
+   * Recibe los datos del formulario como argumento.
+   */
+  @Input() public onSubmitService?: (formData: { [key: string]: any }) => void = () => {
+    console.log('No se ha proporcionado un servicio para enviar los datos');
+  };
 
-  private static ageValidator(control: AbstractControl): { [key: string]: any } | null {
-    const value = control.value;
-    if (!value) return null;
+  /**
+   * Etiqueta del botón para enviar el formulario.
+   */
+  @Input() public submitButtonLabel?: string = '';
 
-    const age = parseInt(value);
-    if (age < 18 || age > 120) {
-      return { invalidAge: true };
-    }
-    return null;
-  }
+  /**
+   * Etiqueta del botón para resetear el formulario.
+   */
+  @Input() public resetButtonLabel?: string = '';
 
-  private static companyValidator(control: AbstractControl): { [key: string]: any } | null {
-    const value = control.value;
-    if (!value) return null;
+  /**
+   * Etiqueta del botón para cancelar el formulario.
+   */
+  @Input() public cancelButtonLabel?: string = '';
 
-    if (value.length < 2) {
-      return { tooShort: true };
-    }
-    return null;
-  }
+  /**
+   * Ancho del diálogo del formulario.
+   */
+  @Input() public dialogWidth: string = '500px';
+
+  /**
+   * Alto del diálogo del formulario.
+   */
+  @Input() public dialogHeight: string = 'auto';
+
+  /**
+   * Indica si el diálogo del formulario está visible.
+   */
+  @Input() public displayDialog: boolean = false;
+
+  /**
+   * Evento que se emite cuando se quiere cambiar la visibilidad del diálogo
+   */
+  @Output() public displayDialogChange = new EventEmitter<boolean>();
+
+  /**
+   * Lista de campos que se mostrarán en el formulario.
+   */
+  @Input() public formInputs: FormularioData[] = [];
+
+  /**
+   * Objeto que contiene los datos del formulario.
+   * Se actualiza automáticamente al cambiar los valores de los campos.
+   */
+  @Input() public formData: { [key: string]: any } = {};
+
+  /**
+   * Objeto que contiene los datos del formulario.
+   * Se actualiza automáticamente al cambiar los valores de los campos.
+   */
+  @Output() public formDataChange = new EventEmitter<{ [key: string]: any }>();
 
   //Datos a mostrar en el formulario
-  formInputs: any[] = [
-    {
-      label: 'Nombre',
-      value: 'Juan',
-      id: 'name',
-      type: 'text',
-      required: true,
-      validators: [
-        Validators.required,
-        Validators.minLength(2),
-        Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/),
-      ],
-      customValidation: (value: string) => {
-        if (!value) return 'El nombre es requerido';
-        if (value.length < 2) return 'El nombre debe tener al menos 2 caracteres';
-        if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) return 'El nombre solo puede contener letras';
-        return null;
-      },
-    },
-    {
-      label: 'Edad',
-      value: '',
-      id: 'ages',
-      type: 'number',
-      required: true,
-      validators: [Validators.required, Formulario.ageValidator],
-      customValidation: (value: number) => {
-        if (!value) return 'La edad es requerida';
-        if (value < 18) return 'Debe ser mayor de 18 años';
-        if (value > 120) return 'Edad no válida';
-        return null;
-      },
-    },
-    {
-      label: 'Fecha de Nacimiento',
-      value: '',
-      id: 'birthdate',
-      type: 'date',
-      required: true,
-      validators: [Validators.required],
-      customValidation: (value: Date) => {
-        if (!value) return 'La fecha de nacimiento es requerida';
-        return null;
-      },
-    },
-    {
-      label: 'Email',
-      value: '',
-      placeholder: 'johndoe@mail.com',
-      id: 'email',
-      type: 'email',
-      required: true,
-      validators: [Validators.required, Validators.email],
-      customValidation: (value: string) => {
-        if (!value) return 'El email es requerido';
-        if (!Validators.email({ value } as AbstractControl)) return null;
-        return 'Email no válido';
-      },
-    },
-    {
-      label: 'Teléfono',
-      value: '',
-      id: 'phone',
-      type: 'text',
-      required: false,
-      validators: [Formulario.phoneValidator],
-      customValidation: (value: string) => {
-        if (!value) return null; // Opcional
-        if (!/^(\+?[0-9]{1,4})?[0-9]{9,10}$/.test(value)) return 'Formato de teléfono inválido';
-        return null;
-      },
-    },
-    {
-      label: 'Empresa',
-      value: '',
-      id: 'company',
-      type: 'text',
-      required: false,
-      validators: [Formulario.companyValidator],
-      customValidation: (value: string) => {
-        if (!value) return null; // Opcional
-        if (value.length < 2) return 'El nombre de la empresa debe tener al menos 2 caracteres';
-        return null;
-      },
-    },
-    {
-      label: 'Acepto términos',
-      value: false,
-      id: 'acceptTerms',
-      type: 'checkbox',
-      required: true,
-      validators: [Validators.requiredTrue],
-      customValidation: (value: boolean) => {
-        if (!value) return 'Debe aceptar los términos y condiciones';
-        return null;
-      },
-    },
-  ];
 
   dynamicForm!: FormGroup; // Formulario reactivo
-  displayDialog: boolean = false; // Controla la visibilidad del diálogo
-
-  // Objeto donde se almacenarán los valores del formulario
-  formData: { [key: string]: any } = {};
 
   constructor(private fb: FormBuilder) {}
 
@@ -195,6 +123,7 @@ export class Formulario implements OnInit {
 
       formControls[input.id] = [input.value, validators];
       this.formData[input.id] = input.value; // Inicializar formData con los valores
+      this.formDataChange.emit(this.formData);
     });
 
     this.dynamicForm = this.fb.group(formControls);
@@ -202,6 +131,7 @@ export class Formulario implements OnInit {
     // Sincronizar cambios del formulario con formData
     this.dynamicForm.valueChanges.subscribe((values) => {
       this.formData = { ...values };
+      this.formDataChange.emit(this.formData);
       // También actualizar los valores en formInputs para mantener sincronización
       this.formInputs.forEach((input) => {
         if (values.hasOwnProperty(input.id)) {
@@ -211,16 +141,15 @@ export class Formulario implements OnInit {
     });
   }
 
-  toggleDialog() {
-    this.displayDialog = !this.displayDialog;
-  }
-
   // Método para manejar el envío del formulario
   onSubmit() {
     if (this.dynamicForm.valid) {
       this.showCurrentData();
-      // Aquí puedes enviar los datos a un servicio
-      this.displayDialog = false; // Cerrar el diálogo después de enviar
+      if (this.onSubmitService){
+        this.onSubmitService(this.formData);
+      }
+      // Emitir evento para cerrar el diálogo
+      this.displayDialogChange.emit(false);
     } else {
       console.log('Formulario inválido');
       this.markFormGroupTouched();
@@ -274,12 +203,6 @@ export class Formulario implements OnInit {
     return null;
   }
 
-  porcentComplete(): number {
-    const totalFields = this.formInputs.length;
-    const validFields = this.formInputs.filter((input) => this.isFieldValid(input.id)).length;
-    return totalFields ? (validFields / totalFields) * 100 : 0;
-  }
-
   isFieldInvalid(fieldId: string): boolean {
     const control = this.dynamicForm.get(fieldId);
     return !!(control && control.errors && (control.dirty || control.touched));
@@ -290,29 +213,6 @@ export class Formulario implements OnInit {
     return !!(control && control.valid && (control.dirty || control.touched));
   }
 
-  // Método para obtener un resumen de validación
-  getValidationSummary(): { valid: boolean; errors: string[]; validFields: string[] } {
-    const errors: string[] = [];
-    const validFields: string[] = [];
 
-    this.formInputs.forEach((input) => {
-      const error = this.getFieldError(input.id);
-      if (error) {
-        errors.push(error);
-      } else if (this.isFieldValid(input.id)) {
-        validFields.push(input.label);
-      }
-    });
 
-    return {
-      valid: errors.length === 0 && this.dynamicForm.valid,
-      errors,
-      validFields,
-    };
-  }
-
-  // Método para verificar si el formulario tiene errores
-  hasErrors(): boolean {
-    return !this.dynamicForm.valid && this.dynamicForm.touched;
-  }
 }

@@ -1,26 +1,17 @@
-<div
-  class="p-4"
-  [class]="{
-    'blur-sm': displayDialog,
-  }"
->
-  <p-button label="Abrir Formulario" (click)="toggleDialog()"></p-button>
-
-  <p-button label="Mostrar Datos" severity="secondary" class="ml-2" (click)="showCurrentData()">
-  </p-button>
-</div>
-
 <p-dialog
-  [style]="{ width: '480px' }"
+  [style]="{ width: dialogWidth, height: dialogHeight }"
   [(visible)]="displayDialog"
+  (visibleChange)="displayDialogChange.emit($event)"
   [modal]="true"
   [resizable]="false"
 >
-  <ng-template #header>
-    <div class="">
-      <span class="font-bold whitespace-nowrap">Formulario Dinámico</span>
-    </div>
-  </ng-template>
+  @if (formTitle) {
+    <ng-template #header>
+      <div class="">
+        <span class="font-bold whitespace-nowrap">{{ formTitle }}</span>
+      </div>
+    </ng-template>
+  }
 
   <ng-template #content>
     <form [formGroup]="dynamicForm" (ngSubmit)="onSubmit()" class="p-4">
@@ -81,7 +72,7 @@
           <!-- Campo fecha -->
           @if (input.type === 'date') {
             <div>
-              <label [for]="input.id" class="block my-2 font-medium ">
+              <label [for]="input.id" class="block my-2 font-medium">
                 {{ input.label }}
                 @if (input.required) {
                   <span class="text-red-500">*</span>
@@ -127,13 +118,16 @@
 
   <ng-template #footer>
     <div class="mt-2">
+      @if (submitButtonLabel) {
+        <p-button label="{{ submitButtonLabel }}" class="ml-2" (click)="onSubmit()"> </p-button>
+      }
+      @if (resetButtonLabel) {
+        <p-button label="{{ resetButtonLabel }}" severity="secondary" class="ml-2" (click)="resetForm()"> </p-button>
+      }
+      @if (cancelButtonLabel) {
+        <p-button label="{{ cancelButtonLabel }}" severity="secondary" class="ml-2" (click)="displayDialogChange.emit(false)"> </p-button>
+      }
 
-
-      <p-button label="Cancelar" severity="secondary" (click)="toggleDialog()"> </p-button>
-
-      <p-button label="Limpiar" severity="secondary" class="ml-2" (click)="resetForm()"> </p-button>
-
-      <p-button label="Guardar" class="ml-2" (click)="onSubmit()"> </p-button>
     </div>
   </ng-template>
 </p-dialog>
