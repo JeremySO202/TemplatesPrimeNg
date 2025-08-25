@@ -122,12 +122,23 @@
         <p-button label="{{ submitButtonLabel }}" class="ml-2" (click)="onSubmit()"> </p-button>
       }
       @if (resetButtonLabel) {
-        <p-button label="{{ resetButtonLabel }}" severity="secondary" class="ml-2" (click)="resetForm()"> </p-button>
+        <p-button
+          label="{{ resetButtonLabel }}"
+          severity="secondary"
+          class="ml-2"
+          (click)="resetForm()"
+        >
+        </p-button>
       }
       @if (cancelButtonLabel) {
-        <p-button label="{{ cancelButtonLabel }}" severity="secondary" class="ml-2" (click)="displayDialogChange.emit(false)"> </p-button>
+        <p-button
+          label="{{ cancelButtonLabel }}"
+          severity="secondary"
+          class="ml-2"
+          (click)="displayDialogChange.emit(false)"
+        >
+        </p-button>
       }
-
     </div>
   </ng-template>
 </p-dialog>

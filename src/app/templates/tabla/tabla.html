@@ -1,0 +1,105 @@
+<div class="card">
+  <p-table
+    [value]="tableData"
+    [columns]="tableColumns"
+    [dataKey]="primaryKey"
+    [paginator]="paginator"
+    [rows]="rowsPerPage"
+    sortMode="multiple"
+  >
+    <!-- Falta el encabezado -->
+    <ng-template #header let-columns>
+      <tr>
+        @for (col of columns; track col.field) {
+          @if (!col.notDisplay) {
+            @switch (col.type) {
+              @case ('text') {
+                <th [pSortableColumn]="col.field" [style.width]="col.width || 'auto'">
+                  <div class="flex justify-between items-center w-full">
+                    <div class="flex items-center gap-1">
+                      <span>{{ col.header }}</span>
+                      @if (!col.notSortable) {
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                      }
+                    </div>
+                    @if (!col.notFilterable) {
+                      <p-columnFilter
+                        type="text"
+                        field="{{ col.field }}"
+                        display="menu"
+                      ></p-columnFilter>
+                    }
+                  </div>
+                </th>
+              }
+              @case ('number') {
+                <th [pSortableColumn]="col.field" [style.width]="col.width || 'auto'">
+                  <div class="flex justify-between items-center w-full">
+                    <div class="flex items-center gap-1">
+                      <span>{{ col.header }}</span>
+                      @if (!col.notSortable) {
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                      }
+                    </div>
+                    @if (!col.notFilterable) {
+                      <p-columnFilter
+                        type="numeric"
+                        field="{{ col.field }}"
+                        display="menu"
+                      ></p-columnFilter>
+                    }
+                  </div>
+                </th>
+              }
+
+              @case ('date') {
+                <th [pSortableColumn]="col.field" [style.width]="col.width || 'auto'">
+                  <div class="flex justify-between items-center w-full">
+                    <div class="flex items-center gap-1">
+                      <span>{{ col.header }}</span>
+                      @if (!col.notSortable) {
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                      }
+                    </div>
+                    @if (!col.notFilterable) {
+                      <p-columnFilter
+                        type="date"
+                        field="{{ col.field }}"
+                        display="menu"
+                      ></p-columnFilter>
+                    }
+                  </div>
+                </th>
+              }
+
+              @default {
+                <th [pSortableColumn]="col.field" [style.width]="col.width || 'auto'">
+                  <div class="flex justify-between items-center w-full">
+                    <div class="flex items-center gap-1">
+                      <span>{{ col.header }}</span>
+                      <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </div>
+                  </div>
+                </th>
+              }
+            }
+          }
+        }
+      </tr>
+    </ng-template>
+    <ng-template #body let-rowData let-columns="columns">
+      <tr>
+        @for (col of columns; track col.field) {
+          @switch (col.type) {
+            @case ('date') {
+              <td>{{ rowData[col.field] | date: 'short' }}</td>
+            }
+            @default {
+              <td>{{ rowData[col.field] }}</td>
+            }
+          }
+        }
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

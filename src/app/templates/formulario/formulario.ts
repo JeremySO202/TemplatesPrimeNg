@@ -145,7 +145,7 @@ export class Formulario implements OnInit {
   onSubmit() {
     if (this.dynamicForm.valid) {
       this.showCurrentData();
-      if (this.onSubmitService){
+      if (this.onSubmitService) {
         this.onSubmitService(this.formData);
       }
       // Emitir evento para cerrar el diálogo
@@ -212,7 +212,4 @@ export class Formulario implements OnInit {
     const control = this.dynamicForm.get(fieldId);
     return !!(control && control.valid && (control.dirty || control.touched));
   }
-
-
-
 }
