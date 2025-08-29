@@ -1,0 +1,11 @@
+<div class="flex h-screen">
+  <!-- Sidebar izquierdo -->
+  <div class="w-auto flex-shrink-0 border-gray-200 shadow-sm">
+    <menu-izquierda-dinamico [menuTitle]="'Mi Aplicación'" [menuItems]="items ?? []" />
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="flex-1 overflow-auto">
+    <router-outlet></router-outlet>
+  </div>
+</div>

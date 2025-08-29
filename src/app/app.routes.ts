@@ -1,9 +1,33 @@
 import { Routes } from '@angular/router';
-import { ImplementacionFormulario } from './templates/formulario/implementacion-formulario/implementacion-formulario';
-import { ImplementacionTabla } from './templates/tabla/implementacion-tabla/implementacion-tabla';
-// import { TestComponent } from './test.component';
+import { MainLayout } from './layout/main-layout/main-layout';
 
 export const routes: Routes = [
-  { path: 'templates/formulario', component: ImplementacionFormulario },
-  { path: 'templates/tabla', component: ImplementacionTabla },
+  {
+    path: '',
+    component: MainLayout,
+    children: [
+      {
+        path: 'templates/formulario',
+        loadComponent: () =>
+          import('./templates/formulario/implementacion-formulario/implementacion-formulario').then(
+            (m) => m.ImplementacionFormulario,
+          ),
+      },
+      {
+        path: 'templates/tabla',
+        loadComponent: () =>
+          import('./templates/tabla/implementacion-tabla/implementacion-tabla').then(
+            (m) => m.ImplementacionTabla,
+          ),
+      },
+      {
+        path: 'templates/menuizquierda',
+        loadComponent: () =>
+          import(
+            './templates/menu-izquierda/implementacion-menu-izquierda/implementacion-menu-izquierda'
+          ).then((m) => m.ImplementacionMenuIzquierda),
+      },
+      { path: '', redirectTo: 'templates/menuizquierda', pathMatch: 'full' },
+    ],
+  },
 ];

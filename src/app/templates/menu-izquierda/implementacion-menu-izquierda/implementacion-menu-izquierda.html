@@ -1,0 +1,16 @@
+<!-- Ejemplo básico con configuración por defecto -->
+<div class="mb-4">
+  <h3 class="text-lg font-bold mb-2">Menú por defecto:</h3>
+  <menu-izquierda-dinamico></menu-izquierda-dinamico>
+</div>
+
+<!-- Ejemplo personalizado con footer -->
+<div class="mb-4">
+  <h3 class="text-lg font-bold mb-2">Menú personalizado con footer:</h3>
+  <menu-izquierda-dinamico
+    [menuTitle]="customMenuTitle"
+    [footerContent]="customFooterContent"
+    [menuItems]="menuItems"
+    [menuWidth]="'w-full md:w-72'"
+  ></menu-izquierda-dinamico>
+</div>
