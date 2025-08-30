@@ -27,7 +27,6 @@ export const routes: Routes = [
             './templates/menu-izquierda/implementacion-menu-izquierda/implementacion-menu-izquierda'
           ).then((m) => m.ImplementacionMenuIzquierda),
       },
-      { path: '', redirectTo: 'templates/menuizquierda', pathMatch: 'full' },
     ],
   },
 ];

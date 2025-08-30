@@ -29,6 +29,11 @@ export class MainLayout {
             icon: 'pi pi-fw pi-pencil',
             routerLink: '/templates/formulario',
           },
+          {
+            label: 'Menu Izquierda',
+            icon: 'pi pi-fw pi-list',
+            routerLink: '/templates/menuizquierda',
+          },
         ],
       },
     ];

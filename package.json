@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "deploy:ghpages": "npm run build -- --base-href=\"/TemplatesPrimeNg/\" && npx angular-cli-ghpages --dir=dist/Templates/browser",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "format": "prettier --write \"src/**/*.{ts,html,css,scss,js,json}\"",
