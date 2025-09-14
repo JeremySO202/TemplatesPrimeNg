@@ -24,6 +24,7 @@ export class ImplementacionMenuIzquierda {
     {
       separator: true,
     },
+
     {
       label: 'Navegación',
       items: [

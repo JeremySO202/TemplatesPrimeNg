@@ -1,11 +1,18 @@
 <div class="flex h-screen">
-  <!-- Sidebar izquierdo -->
-  <div class="w-auto flex-shrink-0 border-gray-200 shadow-sm">
-    <menu-izquierda-dinamico [menuTitle]="'Mi Aplicación'" [menuItems]="items ?? []" />
+  <!-- Sidebar izquierdo fijado -->
+  <div
+    class="fixed left-0 top-0 w-auto flex-shrink-0 border-gray-200 shadow-sm h-screen z-10 flex flex-col"
+  >
+    <menu-izquierda-dinamico
+      [menuTitle]="'Mi Aplicación'"
+      [menuItems]="items ?? []"
+      [menuStyle]="'w-full md:w-60 h-full'"
+      class="h-full"
+    />
   </div>
 
-  <!-- Contenido principal -->
-  <div class="flex-1 overflow-auto">
+  <!-- Contenido principal con margen izquierdo -->
+  <div class="flex-1 overflow-auto ml-64">
     <router-outlet></router-outlet>
   </div>
 </div>

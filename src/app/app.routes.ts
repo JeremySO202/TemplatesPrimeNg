@@ -27,6 +27,13 @@ export const routes: Routes = [
             './templates/menu-izquierda/implementacion-menu-izquierda/implementacion-menu-izquierda'
           ).then((m) => m.ImplementacionMenuIzquierda),
       },
+      {
+        path: 'crud/gestor-inventario',
+        loadComponent: () =>
+          import('./examples/CRUD/gestor-inventario/gestor-inventario').then(
+            (m) => m.GestorInventario,
+          ),
+      },
     ],
   },
 ];

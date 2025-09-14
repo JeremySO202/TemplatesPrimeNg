@@ -30,7 +30,7 @@ export class MenuIzquierda implements OnInit {
   /**
    * Ancho del menú
    */
-  @Input() public menuWidth: string = 'w-full md:w-60';
+  @Input() public menuStyle: string = 'w-full md:w-60';
 
   // Propiedades del componente
   public items: MenuItem[] = [];

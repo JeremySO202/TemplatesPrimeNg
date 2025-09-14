@@ -15,6 +15,13 @@ export class MainLayout {
     this.items = [
       {
         label: 'Usos',
+        items: [
+          {
+            label: 'CRUD',
+            icon: 'pi pi-fw pi-table',
+            routerLink: '/crud/gestor-inventario',
+          },
+        ],
       },
       {
         label: 'Templates Dinamicos',
