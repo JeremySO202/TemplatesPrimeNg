@@ -1,4 +1,11 @@
 <div class="card">
+  <!-- Encabezado con título y botón agregar -->
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">{{ tableTitle }}</h2>
+    <p-button label="Agregar" icon="pi pi-plus" (onClick)="addItem()" class="p-button-success">
+    </p-button>
+  </div>
+
   <p-table
     [value]="tableData"
     [columns]="tableColumns"
@@ -121,6 +128,10 @@
             }
           }
         }
+        <!-- Columna de acciones -->
+        <th style="width: 150px">
+          <span>Acciones</span>
+        </th>
       </tr>
     </ng-template>
     <ng-template #body let-rowData let-columns="columns">
@@ -152,7 +163,32 @@
             }
           }
         }
+        <!-- Columna de acciones -->
+        <td>
+          <div class="flex gap-2">
+            <p-button
+              icon="pi pi-pencil"
+              (onClick)="editItem(rowData)"
+              class="p-button-rounded p-button-text p-button-info"
+              size="small"
+              [pTooltip]="'Editar'"
+            >
+            </p-button>
+            <p-button
+              icon="pi pi-trash"
+              (onClick)="deleteItem(rowData)"
+              class="p-button-rounded p-button-text p-button-danger"
+              size="small"
+              [pTooltip]="'Eliminar'"
+            >
+            </p-button>
+          </div>
+        </td>
       </tr>
     </ng-template>
   </p-table>
+
+  <!-- Componentes de confirmación y mensajes -->
+  <p-confirmDialog></p-confirmDialog>
+  <p-toast></p-toast>
 </div>

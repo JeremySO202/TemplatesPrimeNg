@@ -6,4 +6,35 @@
   [paginator]="true"
   [rowsPerPage]="10"
   [showSearch]="true"
+  (onAdd)="onAdd()"
+  (onEdit)="onEdit($event)"
+  (onDelete)="onDelete($event)"
 ></tabla-CRUD>
+
+<!-- Formulario para agregar -->
+<formulario-dinamico
+  [formTitle]="'Agregar Producto'"
+  [formInputs]="formInputsAdd"
+  [submitButtonLabel]="'Agregar'"
+  [cancelButtonLabel]="'Cancelar'"
+  [displayDialog]="showAddDialog"
+  (displayDialogChange)="showAddDialog = $event"
+  [onSubmitService]="onSubmitAdd"
+  [formData]="formDataAdd"
+  (formDataChange)="formDataAdd = $event"
+  [dialogWidth]="'600px'"
+></formulario-dinamico>
+
+<!-- Formulario para editar -->
+<formulario-dinamico
+  [formTitle]="'Editar Producto'"
+  [formInputs]="formInputsEdit"
+  [submitButtonLabel]="'Actualizar'"
+  [cancelButtonLabel]="'Cancelar'"
+  [displayDialog]="showEditDialog"
+  (displayDialogChange)="showEditDialog = $event"
+  [onSubmitService]="onSubmitEdit"
+  [formData]="formDataEdit"
+  (formDataChange)="formDataEdit = $event"
+  [dialogWidth]="'600px'"
+></formulario-dinamico>

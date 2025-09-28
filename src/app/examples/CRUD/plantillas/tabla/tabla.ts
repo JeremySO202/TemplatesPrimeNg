@@ -1,6 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import { TooltipModule } from 'primeng/tooltip';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 export interface TablaColumns {
   header: string; // Etiqueta de la columna
@@ -15,7 +20,15 @@ export interface TablaColumns {
 
 @Component({
   selector: 'tabla-CRUD',
-  imports: [TableModule, CommonModule],
+  imports: [
+    TableModule,
+    CommonModule,
+    ButtonModule,
+    ConfirmDialogModule,
+    ToastModule,
+    TooltipModule,
+  ],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './tabla.html',
 })
 export class Tabla {
@@ -53,4 +66,43 @@ export class Tabla {
    * Indica si se debe mostrar la barra de búsqueda
    */
   @Input() public showSearch: boolean = true;
+
+  // Eventos CRUD
+  @Output() public onAdd = new EventEmitter<void>();
+  @Output() public onEdit = new EventEmitter<any>();
+  @Output() public onDelete = new EventEmitter<any>();
+
+  constructor(
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+  ) {}
+
+  // Métodos CRUD
+  addItem() {
+    this.onAdd.emit();
+  }
+
+  editItem(rowData: any) {
+    this.onEdit.emit(rowData);
+  }
+
+  deleteItem(rowData: any) {
+    this.confirmationService.confirm({
+      message: `¿Está seguro que desea eliminar este elemento?`,
+      header: 'Confirmar Eliminación',
+      icon: 'pi pi-info-circle',
+      acceptButtonStyleClass: 'p-button-danger p-button-text',
+      rejectButtonStyleClass: 'p-button-text p-button-text',
+      acceptIcon: 'none',
+      rejectIcon: 'none',
+      accept: () => {
+        this.onDelete.emit(rowData);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Confirmado',
+          detail: 'Elemento eliminado exitosamente',
+        });
+      },
+    });
+  }
 }

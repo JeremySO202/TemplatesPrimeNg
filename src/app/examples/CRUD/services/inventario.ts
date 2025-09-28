@@ -70,19 +70,23 @@ export class Inventario {
 
   agregarItem(item: InventarioItem) {
     this.items.push(item);
+    return this.items;
   }
 
   obtenerItems(): InventarioItem[] {
-    return this.items;
+    return [...this.items];
   }
 
   eliminarItem(id: number) {
     this.items = this.items.filter((item) => item.id !== id);
+    return this.items;
   }
+
   actualizarItem(id: number, updatedItem: Partial<InventarioItem>) {
     const index = this.items.findIndex((item) => item.id === id);
     if (index !== -1) {
       this.items[index] = { ...this.items[index], ...updatedItem };
     }
+    return this.items;
   }
 }
