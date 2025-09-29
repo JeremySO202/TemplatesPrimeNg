@@ -1,0 +1,182 @@
+<!-- Chat Bot Dinámico -->
+<div
+  class="chat-bot-container relative {{ containerClass }} {{ themeColors().background }}"
+  [style.width]="chatWidth"
+  [style.height]="config.height || '600px'"
+>
+  <!-- Header del Chat -->
+  <p-card [ngClass]="themeColors().cardBackground" class="h-full flex flex-col border-0">
+    <ng-template pTemplate="header">
+      <div class="bg-gradient-to-r {{ themeColors().headerGradient }} text-white p-4 rounded-t-lg">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <p-avatar
+              [icon]="config.botAvatarIcon"
+              class="{{ themeColors().primary }}"
+              size="large"
+              shape="circle"
+            >
+            </p-avatar>
+            <div>
+              <h3 class="text-lg font-semibold m-0">{{ chatTitle }}</h3>
+              <p class="text-sm text-blue-100 m-0" *ngIf="chatSubtitle">{{ chatSubtitle }}</p>
+            </div>
+          </div>
+
+          <!-- Botón limpiar chat -->
+          <p-button
+            *ngIf="config.enableClearButton"
+            icon="pi pi-trash"
+            (click)="clearChat()"
+            [text]="true"
+            size="small"
+            severity="secondary"
+            class="text-white hover:text-blue-100"
+            pTooltip="Limpiar chat"
+            tooltipPosition="bottom"
+          >
+          </p-button>
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- Área de mensajes -->
+    <p-scrollPanel
+      #scrollPanel
+      class="flex-1 h-full"
+      [style.height]="'calc(' + (config.height || '600px') + ' - 140px)'"
+    >
+      <div class="p-4 space-y-4">
+        <div
+          *ngFor="let message of messages; trackBy: trackByMessageId"
+          class="flex"
+          [ngClass]="{
+            'justify-end': message.sender === 'user',
+            'justify-start': message.sender === 'bot',
+          }"
+        >
+          <!-- Avatar del bot -->
+          <div *ngIf="message.sender === 'bot'" class="flex-shrink-0 mr-3">
+            <p-avatar
+              [icon]="config.botAvatarIcon"
+              size="normal"
+              shape="circle"
+              class="bg-gray-200 text-gray-600"
+            >
+            </p-avatar>
+          </div>
+
+          <!-- Mensaje -->
+          <div
+            class="max-w-xs lg:max-w-md px-4 py-3 rounded-2xl shadow-sm"
+            [class]="
+              (message.sender === 'user' ? themeColors().userMessage : themeColors().botMessage) ||
+              ''
+            "
+          >
+            <!-- Indicador de typing -->
+            <div *ngIf="message.isTyping" class="flex items-center space-x-1">
+              <div class="flex space-x-1">
+                <div
+                  class="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"
+                ></div>
+                <div
+                  class="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"
+                ></div>
+                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+              </div>
+              <span class="text-sm text-gray-500 ml-2">{{ config.loadingText }}</span>
+            </div>
+
+            <!-- Texto del mensaje -->
+            <p *ngIf="!message.isTyping" class="text-sm m-0 leading-relaxed">
+              {{ message.text }}
+            </p>
+
+            <!-- Timestamp -->
+            <div
+              *ngIf="config.enableTimestamps && !message.isTyping"
+              class="text-xs mt-2 opacity-70"
+              [ngClass]="{
+                'text-blue-100': message.sender === 'user',
+                'text-gray-500': message.sender === 'bot',
+              }"
+            >
+              {{ formatTime(message.timestamp) }}
+            </div>
+          </div>
+
+          <!-- Avatar del usuario -->
+          <div *ngIf="message.sender === 'user'" class="flex-shrink-0 ml-3">
+            <p-avatar
+              [icon]="config.userAvatarIcon"
+              size="normal"
+              shape="circle"
+              class="{{ themeColors().primary }} text-white"
+            >
+            </p-avatar>
+          </div>
+        </div>
+      </div>
+    </p-scrollPanel>
+
+    <!-- Input de mensaje -->
+    <ng-template pTemplate="footer">
+      <div class="p-4 border-t {{ themeColors().border }} {{ themeColors().cardBackground }}">
+        <div class="flex items-end space-x-3">
+          <!-- Campo de texto -->
+          <div class="flex-1">
+            <textarea
+              #messageInput
+              [(ngModel)]="currentMessage"
+              [placeholder]="config.placeholder"
+              (keypress)="onKeyPress($event)"
+              [maxlength]="config.maxMessageLength || null"
+              [disabled]="isLoading"
+              class="w-full p-3 rounded-lg resize-none border transition-colors duration-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent {{
+                themeColors().inputBg
+              }} {{ themeColors().inputBorder }} {{ themeColors().textPrimary }}"
+              rows="1"
+              style="min-height: 44px; max-height: 120px"
+            ></textarea>
+
+            <!-- Contador de caracteres -->
+            <div
+              *ngIf="
+                config.maxMessageLength && currentMessage.length > config.maxMessageLength * 0.8
+              "
+              class="text-xs mt-1 text-right"
+              [ngClass]="themeColors().textSecondary"
+            >
+              {{ currentMessage.length }}/{{ config.maxMessageLength }}
+            </div>
+          </div>
+
+          <!-- Botón enviar -->
+          <p-button
+            icon="pi pi-send"
+            (click)="sendMessage()"
+            [disabled]="!currentMessage.trim() || isLoading"
+            class="flex-shrink-0"
+            [loading]="isLoading"
+            size="large"
+            pTooltip="Enviar mensaje (Enter)"
+            tooltipPosition="top"
+          >
+          </p-button>
+        </div>
+
+        <!-- Información adicional -->
+        <div
+          class="flex items-center justify-between mt-2 text-xs {{ themeColors().textSecondary }}"
+        >
+          <span>Presiona Enter para enviar, Shift+Enter para nueva línea</span>
+          <span *ngIf="isLoading" class="flex items-center space-x-2">
+            <p-progressSpinner [style]="{ width: '16px', height: '16px' }"></p-progressSpinner>
+            <span>Procesando...</span>
+          </span>
+        </div>
+      </div>
+    </ng-template>
+  </p-card>
+</div>

@@ -1,13 +1,20 @@
 import { Component } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { MenuIzquierda } from '../menu-izquierda';
+import { CommonModule } from '@angular/common';
+import { ThemeService } from '../../../services/theme.service';
+import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-implementacion-menu-izquierda',
-  imports: [MenuIzquierda],
+  standalone: true,
+  imports: [CommonModule, MenuIzquierda, ButtonModule, TooltipModule],
   templateUrl: './implementacion-menu-izquierda.html',
 })
 export class ImplementacionMenuIzquierda {
+  constructor(public themeService: ThemeService) {}
+
   // Título personalizado del menú
   customMenuTitle = 'MI<span class="text-primary">APP</span>';
 
@@ -124,5 +131,19 @@ export class ImplementacionMenuIzquierda {
   onUserProfileClick() {
     console.log('Click en perfil del usuario:', this.userInfo.name);
     // Aquí puedes agregar lógica para mostrar menú de usuario, etc.
+  }
+
+  /**
+   * Obtiene la información de iconos basada en el tema actual
+   */
+  getCurrentThemeInfo() {
+    return this.themeService.getThemeIcons();
+  }
+
+  /**
+   * Alterna entre los modos de tema
+   */
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 }

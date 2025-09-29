@@ -17,14 +17,14 @@ export class MainLayout {
         label: 'Usos',
         items: [
           {
-            label: 'CRUD',
-            icon: 'pi pi-fw pi-table',
+            label: 'Gestor de Inventario',
+            icon: 'pi pi-fw pi-box',
             routerLink: '/crud/gestor-inventario',
           },
         ],
       },
       {
-        label: 'Templates Dinamicos',
+        label: 'Templates Dinámicos',
         items: [
           {
             label: 'Tabla',
@@ -37,9 +37,9 @@ export class MainLayout {
             routerLink: '/templates/formulario',
           },
           {
-            label: 'Menu Izquierda',
-            icon: 'pi pi-fw pi-list',
-            routerLink: '/templates/menuizquierda',
+            label: 'Chat Bot',
+            icon: 'pi pi-fw pi-android',
+            routerLink: '/templates/chatbot/',
           },
         ],
       },

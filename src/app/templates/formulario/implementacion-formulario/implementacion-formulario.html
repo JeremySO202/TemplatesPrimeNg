@@ -1,24 +1,58 @@
 <div
-  class="p-4 flex items-center justify-center min-h-screen"
-  [class]="{
-    'blur-sm': displayDialog,
-  }"
+  class="p-6 min-h-screen transition-colors duration-300"
+  [ngClass]="themeService.getThemeColors('form').background"
 >
-  <p-button label="Abrir Formulario" (click)="toggleDialog()"></p-button>
+  <!-- Header con botón de tema -->
+  <div class="mb-8 flex justify-between items-center">
+    <div>
+      <h1
+        class="text-3xl font-bold mb-2"
+        [ngClass]="themeService.getThemeColors('form').textPrimary"
+      >
+        📝 Formulario Dinámico con Tema Adaptativo
+      </h1>
+      <p [ngClass]="themeService.getThemeColors('form').textSecondary">
+        Implementación de formulario que se adapta automáticamente al modo claro/oscuro
+      </p>
+    </div>
 
-  <p-button label="Mostrar Datos" severity="secondary" class="ml-2" (click)="showCurrentData()">
-  </p-button>
+    <!-- Botón cambiar tema -->
+    <p-button
+      [icon]="getCurrentThemeInfo().themeToggle"
+      (click)="toggleTheme()"
+      [outlined]="true"
+      size="large"
+      pTooltip="Cambiar tema"
+      tooltipPosition="left"
+    >
+      <span class="ml-2">{{ getCurrentThemeInfo().themeLabel }}</span>
+    </p-button>
+  </div>
+
+  <div
+    [ngClass]="themeService.getThemeColors('form').cardBackground"
+    class="rounded-lg shadow-md p-6 flex items-center justify-center"
+    [class.blur-sm]="displayDialog"
+  >
+    <p-button label="Abrir Formulario" (click)="toggleDialog()"></p-button>
+    <p-button
+      label="Mostrar Datos"
+      severity="secondary"
+      class="ml-2"
+      (click)="showCurrentData()"
+    ></p-button>
+  </div>
+
+  <formulario-dinamico
+    [formTitle]="'Formulario Dinámico'"
+    [onSubmitService]="onSubmit"
+    [submitButtonLabel]="'Ver datos en consola'"
+    [resetButtonLabel]="'Limpiar'"
+    [cancelButtonLabel]="'Cancelar'"
+    [dialogWidth]="'600px'"
+    [dialogHeight]="'auto'"
+    [(displayDialog)]="displayDialog"
+    [formInputs]="formInputs"
+    [(formData)]="formData"
+  ></formulario-dinamico>
 </div>
-
-<formulario-dinamico
-  [formTitle]="'Formulario Dinámico'"
-  [onSubmitService]="onSubmit"
-  [submitButtonLabel]="'Ver datos en consola'"
-  [resetButtonLabel]="'Limpiar'"
-  [cancelButtonLabel]="'Cancelar'"
-  [dialogWidth]="'600px'"
-  [dialogHeight]="'auto'"
-  [(displayDialog)]="displayDialog"
-  [formInputs]="formInputs"
-  [(formData)]="formData"
-></formulario-dinamico>

@@ -34,6 +34,13 @@ export const routes: Routes = [
             (m) => m.GestorInventario,
           ),
       },
+      {
+        path: 'templates/chatbot',
+        loadComponent: () =>
+          import('./templates/n8n-chat-bot/implementacion-chat-bot/implementacion-chat-bot').then(
+            (m) => m.ImplementacionChatBot,
+          ),
+      },
     ],
   },
 ];

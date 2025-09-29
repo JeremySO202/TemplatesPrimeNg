@@ -1,16 +1,66 @@
-<!-- Ejemplo básico con configuración por defecto -->
-<div class="mb-4">
-  <h3 class="text-lg font-bold mb-2">Menú por defecto:</h3>
-  <menu-izquierda-dinamico></menu-izquierda-dinamico>
-</div>
+<div
+  class="p-6 min-h-screen transition-colors duration-300"
+  [ngClass]="themeService.getThemeColors('menu').background"
+>
+  <!-- Header con botón de tema -->
+  <div class="mb-8 flex justify-between items-center">
+    <div>
+      <h1
+        class="text-3xl font-bold mb-2"
+        [ngClass]="themeService.getThemeColors('menu').textPrimary"
+      >
+        📋 Menú Izquierda con Tema Adaptativo
+      </h1>
+      <p [ngClass]="themeService.getThemeColors('menu').textSecondary">
+        Implementación del menú que se adapta automáticamente al modo claro/oscuro
+      </p>
+    </div>
 
-<!-- Ejemplo personalizado con footer -->
-<div class="mb-4">
-  <h3 class="text-lg font-bold mb-2">Menú personalizado con footer:</h3>
-  <menu-izquierda-dinamico
-    [menuTitle]="customMenuTitle"
-    [footerContent]="customFooterContent"
-    [menuItems]="menuItems"
-    [menuStyle]="'w-full md:w-72'"
-  ></menu-izquierda-dinamico>
+    <!-- Botón cambiar tema -->
+    <p-button
+      [icon]="getCurrentThemeInfo().themeToggle"
+      (click)="toggleTheme()"
+      [outlined]="true"
+      size="large"
+      pTooltip="Cambiar tema"
+      tooltipPosition="left"
+    >
+      <span class="ml-2">{{ getCurrentThemeInfo().themeLabel }}</span>
+    </p-button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Ejemplo básico con configuración por defecto -->
+    <div
+      [ngClass]="themeService.getThemeColors('menu').cardBackground"
+      class="rounded-lg shadow-md p-6"
+    >
+      <h3
+        class="text-lg font-bold mb-2"
+        [ngClass]="themeService.getThemeColors('menu').textPrimary"
+      >
+        Menú por defecto:
+      </h3>
+      <menu-izquierda-dinamico></menu-izquierda-dinamico>
+    </div>
+
+    <!-- Ejemplo personalizado con footer -->
+    <div
+      [ngClass]="themeService.getThemeColors('menu').cardBackground"
+      class="rounded-lg shadow-md p-6"
+    >
+      <h3
+        class="text-lg font-bold mb-2"
+        [ngClass]="themeService.getThemeColors('menu').textPrimary"
+      >
+        Menú personalizado con footer:
+      </h3>
+      <menu-izquierda-dinamico
+        [menuTitle]="customMenuTitle"
+        [footerContent]="customFooterContent"
+        [menuItems]="menuItems"
+        [menuStyle]="'w-full md:w-72'"
+      ></menu-izquierda-dinamico>
+    </div>
+  </div>
 </div>

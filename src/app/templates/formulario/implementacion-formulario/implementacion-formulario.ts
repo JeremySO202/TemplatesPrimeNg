@@ -2,13 +2,19 @@ import { Component } from '@angular/core';
 import { Formulario } from '../formulario';
 import { AbstractControl, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { CommonModule } from '@angular/common';
+import { ThemeService } from '../../../services/theme.service';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-implementacion-formulario',
-  imports: [Formulario, ButtonModule],
+  standalone: true,
+  imports: [CommonModule, Formulario, ButtonModule, TooltipModule],
   templateUrl: './implementacion-formulario.html',
 })
 export class ImplementacionFormulario {
+  constructor(public themeService: ThemeService) {}
+
   // Configuración del formulario
   private static phoneValidator(control: AbstractControl): { [key: string]: any } | null {
     const value = control.value;
@@ -155,5 +161,19 @@ export class ImplementacionFormulario {
 
   onSubmit(formData: { [key: string]: any }) {
     console.log('Datos enviados:', formData);
+  }
+
+  /**
+   * Obtiene la información de iconos basada en el tema actual
+   */
+  getCurrentThemeInfo() {
+    return this.themeService.getThemeIcons();
+  }
+
+  /**
+   * Alterna entre los modos de tema
+   */
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 }

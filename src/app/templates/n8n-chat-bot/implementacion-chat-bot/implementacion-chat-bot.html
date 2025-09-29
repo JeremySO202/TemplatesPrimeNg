@@ -1,0 +1,161 @@
+<!-- Ejemplo de Implementación del Chat Bot Dinámico -->
+<div class="implementacion-chat-container p-6 min-h-screen transition-colors duration-300"
+     [ngClass]="themeService.getThemeColors('chat').background">
+
+  <!-- Header con botón de tema -->
+  <div class="mb-8 flex justify-between items-center">
+    <div>
+      <h1 class="text-3xl font-bold mb-2" [ngClass]="themeService.getThemeColors('chat').textPrimary">
+        🤖 Chat Bot Dinámico con Tema Adaptativo
+      </h1>
+      <p [ngClass]="themeService.getThemeColors('chat').textSecondary">
+        Ejemplos de implementación que se adaptan automáticamente al modo claro/oscuro del sistema
+      </p>
+    </div>
+
+    <!-- Botón cambiar tema -->
+    <p-button
+      [icon]="getCurrentThemeInfo().themeToggle"
+      (click)="toggleTheme()"
+      [outlined]="true"
+      size="large"
+      pTooltip="Cambiar tema"
+      tooltipPosition="left">
+      <span class="ml-2">{{ getCurrentThemeInfo().themeLabel }}</span>
+    </p-button>
+  </div>
+
+  <!-- Grid de ejemplos -->
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+
+    <!-- Chat Bot Principal -->
+    <div class="rounded-lg shadow-lg p-4 transition-colors duration-300"
+         [ngClass]="themeService.getThemeColors('chat').cardBackground">
+      <div class="mb-4">
+        <h2 class="text-xl font-semibold mb-2" [ngClass]="themeService.getThemeColors('chat').textPrimary">
+          🎯 Asistente Principal
+        </h2>
+        <p class="text-sm" [ngClass]="themeService.getThemeColors('chat').textSecondary">
+          Chat bot configurado para consultas generales con tema adaptativo
+        </p>
+      </div>
+
+      <chat-bot-dinamico
+        [config]="chatConfig"
+        [chatTitle]="'🤖 Asistente Virtual'"
+        [chatSubtitle]="'Tu consultor inteligente'"
+        [chatWidth]="'100%'"
+        [enableAutoTheme]="true"
+        [containerClass]="'border rounded-lg ' + themeService.getThemeColors('chat').border"
+        (onMessageSent)="onMensajeEnviado($event)"
+        (onResponseReceived)="onRespuestaRecibida($event)"
+        (onError)="onErrorChat($event)"
+        (onChatCleared)="onChatLimpiado()">
+      </chat-bot-dinamico>
+    </div>
+
+    <!-- Chat Bot de Soporte -->
+    <div class="rounded-lg shadow-lg p-4 transition-colors duration-300"
+         [ngClass]="themeService.getThemeColors('chat').cardBackground">
+      <div class="mb-4">
+        <h2 class="text-xl font-semibold mb-2" [ngClass]="themeService.getThemeColors('chat').textPrimary">
+          🛠️ Soporte Técnico
+        </h2>
+        <p class="text-sm" [ngClass]="themeService.getThemeColors('chat').textSecondary">
+          Chat bot especializado en soporte con colores personalizados
+        </p>
+      </div>
+
+      <chat-bot-dinamico
+        [config]="chatSoporteConfig"
+        [chatTitle]="'🛠️ Soporte Técnico'"
+        [chatSubtitle]="'Resolvemos tus dudas'"
+        [chatWidth]="'100%'"
+        [enableAutoTheme]="true"
+        [customColors]="{ headerGradient: 'from-green-500 to-teal-600', primary: 'bg-green-500' }"
+        [containerClass]="'border rounded-lg ' + themeService.getThemeColors('chat').border"
+        (onMessageSent)="onMensajeEnviado($event)"
+        (onResponseReceived)="onRespuestaRecibida($event)"
+        (onError)="onErrorChat($event)"
+        (onChatCleared)="onChatLimpiado()">
+      </chat-bot-dinamico>
+    </div>
+  </div>
+
+  <!-- Información de configuración -->
+  <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <!-- Configuración Principal -->
+    <div class="rounded-lg shadow-lg p-6 transition-colors duration-300"
+         [ngClass]="themeService.getThemeColors('chat').cardBackground">
+      <h3 class="text-lg font-semibold mb-4" [ngClass]="themeService.getThemeColors('chat').textPrimary">
+        ⚙️ Configuración Principal
+      </h3>
+      <div class="space-y-2 text-sm" [ngClass]="themeService.getThemeColors('chat').textSecondary">
+        <div><strong>URL Webhook:</strong> {{chatConfig.webhookUrl}}</div>
+        <div><strong>Mensaje de bienvenida:</strong> {{chatConfig.welcomeMessage}}</div>
+        <div><strong>Placeholder:</strong> {{chatConfig.placeholder}}</div>
+        <div><strong>Altura:</strong> {{chatConfig.height}}</div>
+        <div><strong>Límite caracteres:</strong> {{chatConfig.maxMessageLength}}</div>
+        <div><strong>Timestamps:</strong> {{chatConfig.enableTimestamps ? 'Habilitados' : 'Deshabilitados'}}</div>
+        <div><strong>Botón limpiar:</strong> {{chatConfig.enableClearButton ? 'Habilitado' : 'Deshabilitado'}}</div>
+      </div>
+    </div>
+
+    <!-- Configuración de Soporte -->
+    <div class="rounded-lg shadow-lg p-6 transition-colors duration-300"
+         [ngClass]="themeService.getThemeColors('chat').cardBackground">
+      <h3 class="text-lg font-semibold mb-4" [ngClass]="themeService.getThemeColors('chat').textPrimary">
+        🛠️ Configuración Soporte
+      </h3>
+      <div class="space-y-2 text-sm" [ngClass]="themeService.getThemeColors('chat').textSecondary">
+        <div><strong>URL Webhook:</strong> {{chatSoporteConfig.webhookUrl}}</div>
+        <div><strong>Mensaje de bienvenida:</strong> {{chatSoporteConfig.welcomeMessage}}</div>
+        <div><strong>Placeholder:</strong> {{chatSoporteConfig.placeholder}}</div>
+        <div><strong>Altura:</strong> {{chatSoporteConfig.height}}</div>
+        <div><strong>Límite caracteres:</strong> {{chatSoporteConfig.maxMessageLength}}</div>
+        <div><strong>Timestamps:</strong> {{chatSoporteConfig.enableTimestamps ? 'Habilitados' : 'Deshabilitados'}}</div>
+        <div><strong>Botón limpiar:</strong> {{chatSoporteConfig.enableClearButton ? 'Habilitado' : 'Deshabilitado'}}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guía de uso -->
+  <div class="mt-8 rounded-lg shadow-lg p-6 transition-colors duration-300"
+       [ngClass]="themeService.getThemeColors('chat').cardBackground">
+    <h3 class="text-lg font-semibold mb-4" [ngClass]="themeService.getThemeColors('chat').textPrimary">
+      📚 Guía de Uso con Tema Dinámico
+    </h3>
+
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Propiedades de entrada -->
+      <div>
+        <h4 class="font-medium mb-3" [ngClass]="themeService.getThemeColors('chat').textPrimary">
+          🔧 Propiedades @Input
+        </h4>
+        <ul class="space-y-2 text-sm" [ngClass]="themeService.getThemeColors('chat').textSecondary">
+          <li><code class="px-2 py-1 rounded" [ngClass]="themeService.getThemeColors('chat').secondary">config</code> - Configuración completa del chat</li>
+          <li><code class="px-2 py-1 rounded" [ngClass]="themeService.getThemeColors('chat').secondary">chatTitle</code> - Título del chat</li>
+          <li><code class="px-2 py-1 rounded" [ngClass]="themeService.getThemeColors('chat').secondary">chatSubtitle</code> - Subtítulo del chat</li>
+          <li><code class="px-2 py-1 rounded" [ngClass]="themeService.getThemeColors('chat').secondary">chatWidth</code> - Ancho del contenedor</li>
+          <li><code class="px-2 py-1 rounded" [ngClass]="themeService.getThemeColors('chat').secondary">enableAutoTheme</code> - Habilita tema automático</li>
+          <li><code class="px-2 py-1 rounded" [ngClass]="themeService.getThemeColors('chat').secondary">customColors</code> - Colores personalizados</li>
+          <li><code class="px-2 py-1 rounded" [ngClass]="themeService.getThemeColors('chat').secondary">containerClass</code> - Clases CSS adicionales</li>
+        </ul>
+      </div>
+
+      <!-- Eventos de salida -->
+      <div>
+        <h4 class="font-medium mb-3" [ngClass]="themeService.getThemeColors('chat').textPrimary">📡 Eventos @Output</h4>
+        <ul class="space-y-2 text-sm" [ngClass]="themeService.getThemeColors('chat').textSecondary">
+          <li><code class="px-2 py-1 rounded" [ngClass]="themeService.getThemeColors('chat').secondary">onMessageSent</code> - Cuando se envía un mensaje</li>
+          <li><code class="px-2 py-1 rounded" [ngClass]="themeService.getThemeColors('chat').secondary">onResponseReceived</code> - Cuando se recibe respuesta</li>
+          <li><code class="px-2 py-1 rounded" [ngClass]="themeService.getThemeColors('chat').secondary">onError</code> - Cuando ocurre un error</li>
+          <li><code class="px-2 py-1 rounded" [ngClass]="themeService.getThemeColors('chat').secondary">onChatCleared</code> - Cuando se limpia el chat</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

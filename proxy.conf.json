@@ -1,0 +1,11 @@
+{
+  "/api/n8n/*": {
+    "target": "https://n8n.infiniteccsoftware.work",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/n8n": "https://n8n.infiniteccsoftware.work"
+    }
+  }
+}

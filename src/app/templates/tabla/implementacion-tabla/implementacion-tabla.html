@@ -1,9 +1,47 @@
-<tabla-dinamica
-  [tableTitle]="'Título de la tabla'"
-  [tableData]="data"
-  [tableColumns]="columns"
-  [primaryKey]="'id'"
-  [paginator]="true"
-  [rowsPerPage]="10"
-  [showSearch]="true"
-></tabla-dinamica>
+<div
+  class="p-6 min-h-screen transition-colors duration-300"
+  [ngClass]="themeService.getThemeColors('table').background"
+>
+  <!-- Header con botón de tema -->
+  <div class="mb-8 flex justify-between items-center">
+    <div>
+      <h1
+        class="text-3xl font-bold mb-2"
+        [ngClass]="themeService.getThemeColors('table').textPrimary"
+      >
+        📊 Tabla Dinámica con Tema Adaptativo
+      </h1>
+      <p [ngClass]="themeService.getThemeColors('table').textSecondary">
+        Implementación de tabla que se adapta automáticamente al modo claro/oscuro
+      </p>
+    </div>
+
+    <!-- Botón cambiar tema -->
+    <p-button
+      [icon]="getCurrentThemeInfo().themeToggle"
+      (click)="toggleTheme()"
+      [outlined]="true"
+      size="large"
+      pTooltip="Cambiar tema"
+      tooltipPosition="left"
+    >
+      <span class="ml-2">{{ getCurrentThemeInfo().themeLabel }}</span>
+    </p-button>
+  </div>
+
+  <!-- Tabla con clases adaptativas -->
+  <div
+    [ngClass]="themeService.getThemeColors('table').cardBackground"
+    class="rounded-lg shadow-md p-6"
+  >
+    <tabla-dinamica
+      [tableTitle]="'Título de la tabla'"
+      [tableData]="data"
+      [tableColumns]="columns"
+      [primaryKey]="'id'"
+      [paginator]="true"
+      [rowsPerPage]="10"
+      [showSearch]="true"
+    ></tabla-dinamica>
+  </div>
+</div>
